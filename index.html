@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ginástica Laboral · Sucré</title>
+  <style>
+    :root {
+      --brand-red:    #FA2458;
+      --brand-coral:  #FC4A4E;
+      --brand-yellow: #FED278;
+      --brand-green:  #C4FEDA;
+      --dark:  #1C1C2E;
+      --mid:   #6B7280;
+      --light: #F9FAFB;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #FED278;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 44px 36px 36px;
+      width: 100%;
+      max-width: 540px;
+      box-shadow: 0 24px 72px rgba(0,0,0,.18);
+      text-align: center;
+    }
+
+    /* ── Marca ── */
+    .brand { margin-bottom: 28px; }
+    .brand-logo img {
+      width: 200px;
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+    .brand-sub {
+      margin-top: 8px;
+      font-size: .85rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* ── Telas ── */
+    .screen { display: none; }
+    .screen.ativa { display: block; }
+
+    /* ── Input de matrícula ── */
+    .field-label {
+      display: block;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--dark);
+      text-align: left;
+      margin-bottom: 10px;
+    }
+    .matricula-input {
+      width: 100%;
+      padding: 22px 16px;
+      font-size: 2.4rem;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 6px;
+      color: var(--dark);
+      border: 3px solid #E5E7EB;
+      border-radius: 18px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      margin-bottom: 20px;
+    }
+    .matricula-input:focus {
+      border-color: #16A34A;
+      box-shadow: 0 0 0 4px rgba(22,163,74,.12);
+    }
+
+    /* ── Botões ── */
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 22px 16px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: transform .1s, box-shadow .1s, opacity .15s;
+      margin-bottom: 12px;
+      letter-spacing: .3px;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #16A34A, #22C55E);
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(22,163,74,.32);
+    }
+    .btn-registrar {
+      background: linear-gradient(135deg, #16A34A, #22C55E);
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(22,163,74,.28);
+      font-size: 1.35rem;
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 2px solid #E5E7EB;
+      color: var(--mid);
+      font-size: 1rem;
+      box-shadow: none;
+    }
+
+    /* ── Card do colaborador ── */
+    .colab-card {
+      background: var(--light);
+      border: 2px solid #E5E7EB;
+      border-radius: 18px;
+      padding: 22px 20px;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+    .colab-nome {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+    .chip-mat   { background: #16A34A; color: #fff; }
+    .chip-setor { background: var(--brand-yellow); color: var(--dark); }
+
+    /* ── Banner já registrado ── */
+    .ja-registrado-banner {
+      background: #F0FDF4;
+      border: 2px solid #86EFAC;
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 22px;
+      text-align: left;
+    }
+    .ja-registrado-label {
+      font-size: .9rem;
+      font-weight: 700;
+      color: #15803D;
+    }
+    .ja-registrado-hora {
+      font-size: .82rem;
+      color: #166534;
+      margin-top: 3px;
+    }
+
+    /* ── Tela de feedback ── */
+    .feedback-icon { font-size: 5.5rem; margin-bottom: 12px; }
+    .feedback-titulo {
+      font-size: 1.75rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    .feedback-msg {
+      font-size: 1rem;
+      color: var(--mid);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .feedback-msg strong { color: var(--dark); }
+    .txt-success { color: #16A34A; }
+    .txt-warning { color: #D97706; }
+    .txt-error   { color: var(--brand-red); }
+    .countdown {
+      font-size: .85rem;
+      color: var(--mid);
+      margin-top: 12px;
+    }
+
+    /* ── Alerta de erro ── */
+    .alerta {
+      background: #FFF1F3;
+      border: 2px solid #FECDD3;
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: var(--brand-red);
+      font-size: .9rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: none;
+      text-align: left;
+    }
+
+    /* ── Loading ── */
+    .loading {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 18px 0;
+      color: var(--mid);
+      font-size: .95rem;
+    }
+    .loading.ativo { display: flex; }
+    .spinner {
+      width: 22px; height: 22px;
+      border: 3px solid #E5E7EB;
+      border-top-color: #16A34A;
+      border-radius: 50%;
+      animation: gira .75s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes gira { to { transform: rotate(360deg); } }
+
+    /* ── Config alert ── */
+    .config-alert {
+      background: #FFF7ED;
+      border: 2px solid #FED7AA;
+      border-radius: 14px;
+      padding: 18px;
+      color: #9A3412;
+      font-size: .9rem;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .config-alert strong { display: block; margin-bottom: 4px; font-size: 1rem; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- Cabeçalho -->
+  <div class="brand">
+    <div class="brand-logo"><img src="SELO.png" alt="Sucré"></div>
+    <div class="brand-sub">🤸 Ginástica Laboral</div>
+  </div>
+
+  <!-- ╔══════════════════════════════════╗
+       ║  TELA 1 — Digitar matrícula      ║
+       ╚══════════════════════════════════╝ -->
+  <div id="tela-matricula" class="screen ativa">
+
+    <div id="config-alert" class="config-alert" style="display:none">
+      <strong>⚙️ Configuração necessária</strong>
+      Abra o arquivo <code>index.html</code> e substitua o valor de
+      <code>SCRIPT_URL</code> pela URL do seu Apps Script implantado.
+    </div>
+
+    <label class="field-label" for="input-mat">Digite sua matrícula:</label>
+    <input
+      id="input-mat"
+      class="matricula-input"
+      type="text"
+      inputmode="numeric"
+      placeholder="0000"
+      maxlength="10"
+      autocomplete="off"
+      autofocus
+    >
+
+    <div id="alerta-mat" class="alerta"></div>
+
+    <div id="loading-busca" class="loading">
+      <div class="spinner"></div>
+      <span>Buscando colaborador…</span>
+    </div>
+
+    <button class="btn btn-primary" id="btn-consultar" onclick="buscarColaborador()">
+      Consultar →
+    </button>
+
+  </div>
+
+  <!-- ╔══════════════════════════════════╗
+       ║  TELA 2 — Confirmar presença     ║
+       ╚══════════════════════════════════╝ -->
+  <div id="tela-acao" class="screen">
+
+    <div class="colab-card">
+      <div class="colab-nome" id="disp-nome"></div>
+      <div class="chips">
+        <span class="chip chip-mat"   id="disp-mat"></span>
+        <span class="chip chip-setor" id="disp-setor"></span>
+      </div>
+    </div>
+
+    <div id="banner-ja-registrado" class="ja-registrado-banner" style="display:none">
+      <div class="ja-registrado-label">✅ Presença já registrada hoje</div>
+      <div class="ja-registrado-hora" id="disp-hora-registro"></div>
+    </div>
+
+    <div id="alerta-acao" class="alerta"></div>
+
+    <div id="loading-acao" class="loading">
+      <div class="spinner"></div>
+      <span>Registrando presença…</span>
+    </div>
+
+    <button id="btn-registrar" class="btn btn-registrar" onclick="registrarPresenca()">
+      🤸 Registrar Presença
+    </button>
+    <button class="btn btn-ghost" onclick="voltarInicio()">
+      ← Voltar
+    </button>
+
+  </div>
+
+  <!-- ╔══════════════════════════════════╗
+       ║  TELA 3 — Feedback               ║
+       ╚══════════════════════════════════╝ -->
+  <div id="tela-feedback" class="screen">
+    <div class="feedback-icon" id="fb-icon"></div>
+    <div class="feedback-titulo" id="fb-titulo"></div>
+    <p class="feedback-msg"     id="fb-msg"></p>
+    <button class="btn btn-primary" onclick="voltarInicio()">Nova Consulta</button>
+    <p class="countdown" id="countdown"></p>
+  </div>
+
+</div><!-- /card -->
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw8g6_GgtT23jdwpEjyisR_t8fryR2yI_IWPzo8WFMrRSoTzw_ZtI39tx52KhYKwQFA3w/exec';
+
+let colaborador    = null;
+let countdownTimer = null;
+
+window.addEventListener('DOMContentLoaded', () => {
+  focusInput();
+});
+
+document.getElementById('input-mat').addEventListener('keydown', e => {
+  if (e.key === 'Enter') buscarColaborador();
+});
+
+function mostrarTela(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('ativa'));
+  document.getElementById(id).classList.add('ativa');
+}
+
+function voltarInicio() {
+  pararCountdown();
+  colaborador = null;
+  document.getElementById('input-mat').value = '';
+  ocultarAlerta('alerta-mat');
+  mostrarTela('tela-matricula');
+  focusInput();
+}
+
+function focusInput() {
+  setTimeout(() => document.getElementById('input-mat').focus(), 80);
+}
+
+async function api(params) {
+  const url = new URL(SCRIPT_URL);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const res = await fetch(url.toString());
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+async function buscarColaborador() {
+  const mat = document.getElementById('input-mat').value.trim();
+  if (!mat) { mostrarAlerta('alerta-mat', 'Digite sua matrícula.'); return; }
+
+  ocultarAlerta('alerta-mat');
+  setLoadingBusca(true);
+
+  try {
+    const dados = await api({ action: 'consultar', matricula: mat });
+    if (dados.erro) { mostrarAlerta('alerta-mat', dados.erro); return; }
+    if (!dados.encontrado) {
+      mostrarAlerta('alerta-mat', 'Matrícula não encontrada. Verifique e tente novamente.');
+      return;
+    }
+
+    colaborador = dados;
+    montarTelaAcao(dados);
+
+  } catch (err) {
+    mostrarAlerta('alerta-mat', 'Erro de conexão. Verifique a internet e tente novamente.');
+    console.error(err);
+  } finally {
+    setLoadingBusca(false);
+  }
+}
+
+function montarTelaAcao(dados) {
+  document.getElementById('disp-nome').textContent  = dados.nome;
+  document.getElementById('disp-mat').textContent   = `# ${dados.matricula}`;
+  document.getElementById('disp-setor').textContent = dados.setor;
+  ocultarAlerta('alerta-acao');
+
+  const banner  = document.getElementById('banner-ja-registrado');
+  const btnReg  = document.getElementById('btn-registrar');
+
+  if (dados.jaRegistrado) {
+    banner.style.display = 'block';
+    document.getElementById('disp-hora-registro').textContent =
+      `Registrado hoje às ${dados.horaRegistro}`;
+    btnReg.disabled = true;
+  } else {
+    banner.style.display = 'none';
+    btnReg.disabled = false;
+  }
+
+  mostrarTela('tela-acao');
+}
+
+async function registrarPresenca() {
+  ocultarAlerta('alerta-acao');
+  setLoadingAcao(true);
+
+  try {
+    const r = await api({
+      action:    'registrar',
+      matricula: colaborador.matricula,
+      nome:      colaborador.nome,
+      setor:     colaborador.setor
+    });
+    if (r.erro) { mostrarAlerta('alerta-acao', r.erro); return; }
+
+    mostrarFeedback({
+      icon:   '🤸',
+      titulo: 'Presença registrada!',
+      cls:    'txt-success',
+      msg:    `Ótimo, <strong>${colaborador.nome}</strong>!<br>Sua presença na ginástica laboral foi registrada às <strong>${r.hora}</strong>.`,
+      voltar: 5
+    });
+
+  } catch (err) {
+    mostrarAlerta('alerta-acao', 'Erro de conexão. Tente novamente.');
+    console.error(err);
+  } finally {
+    setLoadingAcao(false);
+  }
+}
+
+function mostrarFeedback({ icon, titulo, cls, msg, voltar }) {
+  document.getElementById('fb-icon').textContent = icon;
+  const t = document.getElementById('fb-titulo');
+  t.className   = `feedback-titulo ${cls}`;
+  t.textContent = titulo;
+  document.getElementById('fb-msg').innerHTML = msg;
+
+  mostrarTela('tela-feedback');
+
+  if (voltar) {
+    let n = voltar;
+    document.getElementById('countdown').textContent = `Voltando automaticamente em ${n}s…`;
+    countdownTimer = setInterval(() => {
+      n--;
+      if (n <= 0) { pararCountdown(); voltarInicio(); }
+      else document.getElementById('countdown').textContent = `Voltando automaticamente em ${n}s…`;
+    }, 1000);
+  }
+}
+
+function pararCountdown() {
+  if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+}
+
+function mostrarAlerta(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent   = msg;
+  el.style.display = 'block';
+}
+function ocultarAlerta(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+function setLoadingBusca(show) {
+  document.getElementById('loading-busca').classList.toggle('ativo', show);
+  document.getElementById('btn-consultar').disabled = show;
+}
+function setLoadingAcao(show) {
+  document.getElementById('loading-acao').classList.toggle('ativo', show);
+  document.getElementById('btn-registrar').disabled = show;
+}
+</script>
+
+</body>
+</html>
